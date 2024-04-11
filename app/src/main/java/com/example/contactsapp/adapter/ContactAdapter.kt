@@ -50,7 +50,7 @@ class ContactAdapter(val applicationContext: Context, val contactList: List<Cont
 
         holder.card.setOnClickListener {
             Globals.isUpdating = true
-            openDialog(currData.name,currData.number)
+            openDialog(currData.id,currData.name,currData.number)
         }
 
         holder.card.setOnLongClickListener {
@@ -97,7 +97,7 @@ class ContactAdapter(val applicationContext: Context, val contactList: List<Cont
         dialog.show()
     }
 
-    private fun openDialog(name1: String,number1: String) {
+    private fun openDialog(id:Long,name1: String,number1: String) {
 
         val dialog = Dialog(applicationContext)
         dialog.setContentView(R.layout.dialog_contact)
@@ -123,7 +123,7 @@ class ContactAdapter(val applicationContext: Context, val contactList: List<Cont
                 number.isEnabled = false
 
                 if (Globals.isUpdating) {
-                    updateData(applicationContext,1, name.text.toString(), number.text.toString())
+                    updateData(applicationContext,id, name.text.toString(), number.text.toString())
                 } else {
                     Toast.makeText(MainActivity(), "Do nothing!!", Toast.LENGTH_SHORT).show()
                 }
