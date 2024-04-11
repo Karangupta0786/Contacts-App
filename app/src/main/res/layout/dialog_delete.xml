@@ -19,7 +19,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:text="Do you relly wants to delete it?"
+            android:text="Do you really wants to delete it?"
             android:textColor="@color/white"
             android:textStyle="bold"
             android:textSize="21sp"/>
