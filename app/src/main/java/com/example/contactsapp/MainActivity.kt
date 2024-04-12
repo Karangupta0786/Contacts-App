@@ -2,8 +2,10 @@ package com.example.contactsapp
 
 import android.app.Dialog
 import android.content.Context
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
@@ -46,6 +48,7 @@ class MainActivity : AppCompatActivity() {
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.dialog_contact)
         dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+
         val name : EditText = dialog.findViewById(R.id.et_name)
         val number : EditText = dialog.findViewById(R.id.et_number)
 
@@ -56,7 +59,7 @@ class MainActivity : AppCompatActivity() {
 
         btn_save.setOnClickListener {
 
-            if (name.text!!.isEmpty()) {
+            if (name.text.isEmpty()) {
                 name.error = "Please enter the name"
             } else if (number.text!!.isEmpty()) {
                 number.error = "Please enter the number"

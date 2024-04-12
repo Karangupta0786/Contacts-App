@@ -1,17 +1,24 @@
 package com.example.contactsapp.adapter
 
 
+import android.Manifest
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.PermissionChecker
 import androidx.recyclerview.widget.RecyclerView
 import com.example.contactsapp.MainActivity
 import com.example.contactsapp.R
@@ -26,11 +33,14 @@ import kotlinx.coroutines.launch
 class ContactAdapter(val applicationContext: Context, val contactList: List<Contact>) :
     RecyclerView.Adapter<ContactAdapter.ContactViewHolder>() {
 
+        companion object{
+            val REQUEST_CALL = 1
+        }
     class ContactViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name : TextView = itemView.findViewById(R.id.name)
         val number :TextView = itemView.findViewById(R.id.number)
         val card: CardView = itemView.findViewById(R.id.card_contact)
-//        val img_call: ImageView = itemView.findViewById(R.id.img_call)
+        val img_call: ImageView = itemView.findViewById(R.id.img_call)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
@@ -58,22 +68,33 @@ class ContactAdapter(val applicationContext: Context, val contactList: List<Cont
             true
         }
 
-//        val intent = Intent()
-//        intent.action = Intent.ACTION_CALL
+        holder.img_call.setOnClickListener {
+            callButton(currData.number.toString())
+        }
+    }
 
-//        holder.img_call.setOnClickListener {
-//            if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-//                // Permission is granted, proceed with making the call
-//                val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + holder.number))
-//                applicationContext.startActivity(intent)
-//            } else {
-//                // Permission is not granted, request it from the user
-//                ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.CALL_PHONE), REQUEST_CALL_PERMISSION)
-//            }
-//
-//            val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + holder.number))
+    private fun callButton(number: String) {
+        val number = number
+        val intent = Intent(Intent.ACTION_DIAL)
+        intent.setData(Uri.parse("tel:$number"))
+//        intent.data = Uri.parse("tel:$number")
+        applicationContext.startActivity(intent)
+
+
+//        if (ActivityCompat.checkSelfPermission(applicationContext,Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED){
+//            Toast.makeText(applicationContext, "Please grant Permission", Toast.LENGTH_SHORT).show()
+//            requestPermission()
+//        }
+//        else{
 //            applicationContext.startActivity(intent)
 //        }
+
+    }
+
+
+    private fun requestPermission(){
+        ActivityCompat.requestPermissions(MainActivity(), arrayOf(Manifest.permission.CALL_PHONE.toString()),
+            REQUEST_CALL)
     }
 
     private fun openDeleteDialog(context: Context,id: Long,name: String,number: String) {
@@ -144,5 +165,4 @@ class ContactAdapter(val applicationContext: Context, val contactList: List<Cont
             ContactRepository.delete(context, Contact(id,name,number))
         }
     }
-
 }
