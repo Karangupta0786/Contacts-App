@@ -75,19 +75,18 @@ class ContactAdapter(val applicationContext: Context, val contactList: List<Cont
 
     private fun callButton(number: String) {
         val number = number
-        val intent = Intent(Intent.ACTION_DIAL)
+        val intent = Intent(Intent.ACTION_CALL)
         intent.setData(Uri.parse("tel:$number"))
 //        intent.data = Uri.parse("tel:$number")
-        applicationContext.startActivity(intent)
+//        applicationContext.startActivity(intent)
 
-
-//        if (ActivityCompat.checkSelfPermission(applicationContext,Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED){
-//            Toast.makeText(applicationContext, "Please grant Permission", Toast.LENGTH_SHORT).show()
-//            requestPermission()
-//        }
-//        else{
-//            applicationContext.startActivity(intent)
-//        }
+        if (ActivityCompat.checkSelfPermission(applicationContext,Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED){
+            Toast.makeText(applicationContext, "Please grant Permission", Toast.LENGTH_SHORT).show()
+            requestPermission()
+        }
+        else{
+            applicationContext.startActivity(intent)
+        }
 
     }
 
