@@ -30,7 +30,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-class ContactAdapter(val applicationContext: Context, val contactList: List<Contact>) :
+class ContactAdapter(val applicationContext: Context, var contactList: List<Contact>) :
     RecyclerView.Adapter<ContactAdapter.ContactViewHolder>() {
 
         companion object{
@@ -164,4 +164,10 @@ class ContactAdapter(val applicationContext: Context, val contactList: List<Cont
             ContactRepository.delete(context, Contact(id,name,number))
         }
     }
+
+    fun onSearch(filteredList:List<Contact>){
+        contactList = filteredList
+        notifyDataSetChanged()
+    }
+
 }

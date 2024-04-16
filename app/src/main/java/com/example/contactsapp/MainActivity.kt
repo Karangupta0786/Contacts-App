@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.Button
@@ -20,19 +22,41 @@ import com.example.contactsapp.viewModel.ContactViewModel
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: ContactViewModel
     private lateinit var adapter: ContactAdapter
+    lateinit var etSearch:EditText
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        etSearch = findViewById(R.id.et_search)
+
 
         viewModel = ViewModelProvider(this)[ContactViewModel::class.java]
 
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_contacts)
 
         recyclerView.layoutManager = LinearLayoutManager(applicationContext)
-        viewModel.getContact(this)?.observe(this){
-            adapter = ContactAdapter(this,it)
+        viewModel.getContact(this)?.observe(this){ list->
+            adapter = ContactAdapter(this,list)
             recyclerView.adapter = adapter
             adapter.notifyDataSetChanged()
+
+            etSearch.addTextChangedListener(object : TextWatcher{
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                }
+
+                override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    val filteredData = list.filter { contactData->
+                        contactData.name.contains(s.toString(), ignoreCase = true) || contactData.number.contains(s.toString())
+                    }
+                    adapter.onSearch(filteredData)
+                }
+
+                override fun afterTextChanged(p0: Editable?) {
+                }
+
+            })
+
+
         }
 
 
